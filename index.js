@@ -1,5 +1,9 @@
 const coursesRouter = require('./routes/courses');
+const albumRouter = require('./routes/album');
+const connectToDB = require('./DB/mongodb');
 const homeRouter = require('./routes/home');
+const userRouter = require('./routes/users');
+const authRouter = require('./routes/auth');
 const express = require('express');
 const appStartUpDebugger = require('debug')('app:startup');
 const config = require('config');
@@ -31,8 +35,13 @@ console.log(app.get('env'));
 // app.engine('pug', require('pug').__express)
 // app.set('view engine', 'pug');
 // app.set('views', path.join(__dirname, 'views')); //default // Not Working as expected
+connectToDB();
 app.use('/', homeRouter);
-app.use('/api/courses', coursesRouter);
+app.use('/api/courses', coursesRouter); // For CRUD operations old
+// app.use('/api/courses', coursesRouter); // For CRUD operations new
+app.use('/api/albums', albumRouter);
+app.use('/api/users', userRouter);
+app.use('/api/auth', authRouter);
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Listening on port ${port}...`)
